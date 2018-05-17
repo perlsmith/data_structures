@@ -1,52 +1,39 @@
 # python3
 
-import sys, threading
+import sys, threading, pdb
 sys.setrecursionlimit(10**7) # max depth of recursion
 threading.stack_size(2**27)  # new thread will get stack of such size
 
-class Node :
-	def __init__( self, parent ) :
-	# ( object, integer ) --> nothing (creates object in memory)
-		self.parent = parent
-		if -1 == parent :
-			self.depth = 1	# root node!!
-		else
-			self.depth = 0	# >= 1 always, so, this tells you to compute
-				# and assign!
-
-	def get_depth( self ) :
-	# ( object ) --> int (which is 1 + num branches to root )
-		if 0 == self.depth :
-			self.depth = self.parent.get_depth()
-			return self.depth
-		else
-			return self.depth	# this is where the dynamic programming comes in
-
-class Tree :
-	def read(self) :
-		self.n = int( sys.stdin.readline() )
-		for i, parent in list( map( int, sys.stdin.readline().split())) :
-			
 	
 class TreeHeight:	# from starter solution
 	def read(self):
 		self.n = int(sys.stdin.readline())
-		self.parent = list(map(int, sys.stdin.readline().split()))
+		self.parents = list(map(int, sys.stdin.readline().split()))
+		self.depths = [0] * self.n
 
+	def get_depth(self, index ) :
+	# object, int --> int
+	# int is the index of the child parents array - i.e., 0 in [4 -1 ..]
+	# means that 4 is the parent of 0 and will be returned
+		if -1 == self.parents[ index ] :
+			return 1
+		elif 0 == self.depths[index] :
+			self.depths[index] = 1 + self.get_depth( self.parents[index] )	# dynamic programming
+			return self.depths[index]
+		else :
+			return self.depths[index]
+		
+		
 	def compute_height(self):
 		# Replace this code with a faster implementation
-		maxHeight = 0
+		maxDepth = 0
 		for vertex in range(self.n):
-			height = 0
-			i = vertex
-			while i != -1:
-				height += 1
-				i = self.parent[i]
-				maxHeight = max(maxHeight, height);
-		return maxHeight;
+			maxDepth = max(maxDepth, self.get_depth( vertex ) )
+		return maxDepth;
 
 def main():
   tree = TreeHeight()
+  #pdb.set_trace()
   tree.read()
   print(tree.compute_height())
 
