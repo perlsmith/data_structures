@@ -32,6 +32,11 @@ class JobQueue:
 				minInd = l
 			if r < n and self.occupancy[minInd][1] > self.occupancy[r][1] :
 				minInd = r
+			if l < n and r < n and self.occupancy[l][1] == self.occupancy[r][1] :
+				if self.occupancy[l][0] < self.occupancy[r][0] :
+					minInd = l
+				else :
+					minInd = r
 			if minInd != index :
 				self.occupancy[minInd], self.occupancy[index] = self.occupancy[index], self.occupancy[minInd]
 				self.sift_down( minInd )
