@@ -11,17 +11,30 @@ def getParent(table):
 		parents[table] = getParent( parents[table] )	# replace current parent
 	return parents[table]
 
-def merge(destination, source, lines):
-	# (int, int ) --> nothing, but side effect is that lines and parents are manipulated
+def merge(destination, source, lines, ans):
+	# (int, int, list, int ) --> int, and side effect is that lines and parents are manipulated
+	# given ans, it will return the updated ans - that is, lines of the destination topping existing ans will
+	# cause ans to be updated
 	realDestination, realSource = getParent(destination), getParent(source)
 
 	if realDestination != realSource :
 
 	# merge two components
 	# use union by rank heuristic 
-		parents[realSource] = realDestination
-		lines[realDestination] += lines[realSource]
-		lines[source] = 0
+		if rank[ realSource ] > rank[ realDestination ] :
+			parents[realSource] = realDestination
+			lines[realDestination] += lines[realSource]
+			# lines[source] = 0	# is this really necessary? Shouldn't parents tell you if you have a link?
+			if lines[realDestination] > ans :
+				return lins[realDestination]
+		else :
+			parents[realDestination] = realSource
+			lines[realSource] += lines[realDestination]
+			if rank[ realDestination] == rank[realSource] :
+				rank[ realSource ] += 1
+			if lines[realSource] > ans :
+				return lines[realSource]
+		
 
     
 if __name__ == '__main__':
@@ -35,8 +48,8 @@ if __name__ == '__main__':
 	# pdb.set_trace()
 	for i in range(m):
 		destination, source = map(int, sys.stdin.readline().split())
-		merge(destination - 1, source - 1, lines)
-		print(max(lines))
+		ans = merge(destination - 1, source - 1, lines)
+		print(   ans  )
 
 # n tables and m operations, each op is a merge and you have to report max size (of any table) after the op
 # not that that input is using 1 based indexing for the merge operations
