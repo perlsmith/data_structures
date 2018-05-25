@@ -26,7 +26,9 @@ def merge(destination, source, lines, ans):
 			lines[realDestination] += lines[realSource]
 			# lines[source] = 0	# is this really necessary? Shouldn't parents tell you if you have a link?
 			if lines[realDestination] > ans :
-				return lins[realDestination]
+				return lines[realDestination]
+			else :
+				return ans
 		else :
 			parents[realDestination] = realSource
 			lines[realSource] += lines[realDestination]
@@ -34,6 +36,10 @@ def merge(destination, source, lines, ans):
 				rank[ realSource ] += 1
 			if lines[realSource] > ans :
 				return lines[realSource]
+			else :
+				return ans
+	else :
+		return ans
 		
 
     
@@ -48,7 +54,7 @@ if __name__ == '__main__':
 	# pdb.set_trace()
 	for i in range(m):
 		destination, source = map(int, sys.stdin.readline().split())
-		ans = merge(destination - 1, source - 1, lines)
+		ans = merge(destination - 1, source - 1, lines, ans)
 		print(   ans  )
 
 # n tables and m operations, each op is a merge and you have to report max size (of any table) after the op
