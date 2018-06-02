@@ -44,6 +44,7 @@ def merge(destination, source, lines, ans):
 
     
 if __name__ == '__main__':
+	# sys.setrecursionlimit( 100000 )
 		
 	n, m = map(int, sys.stdin.readline().split())
 	lines = list(map(int, sys.stdin.readline().split()))
