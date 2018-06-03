@@ -22,51 +22,42 @@ class TreeOrders:
 
 	def io_traverse(self, index ) :
 		if self.left[index] != -1 :
-			result = self.io_traverse( self.left[index] )
-		else :
-			result = []
-		result = result + [self.key[index]]
+			self.io_traverse( self.left[index] )
+		self.result += [self.key[index]]
 		if self.right[index] != -1 :
-			result = result + self.io_traverse( self.right[index] )
-		return result
+			self.io_traverse( self.right[index] )
 			
 	def po_traverse(self, index ) :
 		if self.left[index] != -1 :
-			result = self.po_traverse( self.left[index] )
-		else :
-			result = []
+			self.po_traverse( self.left[index] )
 		if self.right[index] != -1 :
-			result = result + self.po_traverse( self.right[index] )
-		result = result + [self.key[index]]
-		return result
+			self.po_traverse( self.right[index] )
+		self.result += [self.key[index]]
 
 	def preo_traverse(self, index ) :
-		result = [self.key[index]]
+		self.result += [self.key[index]]
 		if self.left[index] != -1 :
-			result = result + self.preo_traverse( self.left[index] )
+			self.preo_traverse( self.left[index] )
 		if self.right[index] != -1 :
-			result = result + self.preo_traverse( self.right[index] )
-		return result		
+			self.preo_traverse( self.right[index] )
 
 	def inOrder(self):
 	# called on TreeOrders object --> list of ints (keys)
 	# left-child, node, right-child
 		self.result = []
-		self.result = self.io_traverse(0)
-    # Finish the implementation
-    # You may need to add a new recursive method to do that
+		self.io_traverse(0)
                 
 		return self.result
 
 	def preOrder(self):
 		self.result = []
-		self.result = self.preo_traverse(0)
+		self.preo_traverse(0)
                 
 		return self.result
 
 	def postOrder(self):
 		self.result = []
-		self.result = self.po_traverse(0)
+		self.po_traverse(0)
                 
 		return self.result
 
