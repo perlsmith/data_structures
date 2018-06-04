@@ -11,29 +11,21 @@ def IsBinarySearchTree(tree, index):
 	# Implement correct algorithm here
 	if len( tree ) == 0 :
 		return True
+	return chkMinMax( tree, 0 , -2**32, 2**32 )
+
+	
+def chkMinMax( tree, index, Min, Max ) : # min and max are builtins - maybe..
+	if tree[index][0] < Min or tree[index][0] > Max :
+		return False
 	if tree[index][1] == tree[index][2] == -1 :
 		return True
-	if tree[index][1] != -1 and tree[index][0] < getMax( tree, tree[index][1] ) :
+	if tree[index][1] != -1 and not chkMinMax( tree, tree[index][1], Min, tree[index][0] ) :
+	# left child - Max is what needs to reduce
 		return False
-	if tree[index][2] != -1 and tree[index][0] > getMax( tree, tree[index][2] ) :
+	if tree[index][2] != -1 and not chkMinMax( tree, tree[index][2], tree[index][0], Max ) :
+	# right child - Min is what needs to increase..
 		return False
-	return IsBinarySearchTree( tree, tree[index][1] ) and IsBinarySearchTree( tree, tree[index][2] )
-	
-def getMax( tree, index ) :
-	# list of list of ints, int --> int
-	# will just travel down the right children to report back the max value
-	if tree[index][2] == -1 :
-		return tree[index][0]	# da key
-	else :
-		return max( tree[index][0] , getMax( tree, tree[index][2] ) )
-
-def getMin( tree, index ) :
-	# list of list of ints, int --> int
-	# will just travel down the right children to report back the max value
-	if tree[index][1] == -1 :
-		return tree[index][0]	# da key
-	else :
-		return min( tree[index][0] , getMin( tree, tree[index][1] ) )
+	return True
 		
 def main():
 	nodes = int(sys.stdin.readline().strip())	# reads the first line --> int - # of nodes
@@ -49,3 +41,10 @@ def main():
 threading.Thread(target=main).start()
 
 # statement says vertex with index 0 is the root..
+
+# what is the right way to do this and still be efficient?
+# if you go down a left branch, then you need to be less than something, but,
+# you also need to be greater than the root, if you're on the right of the root..
+# means? when you go right, you pass the min of the root and the max of the parent to your children
+# when you go left, ..
+# min can only increase, max can only decrease.. start at -2**32 and +2**32
