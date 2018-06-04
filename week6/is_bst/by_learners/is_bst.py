@@ -13,17 +13,34 @@ def IsBinarySearchTree(tree, index):
 		return True
 	if tree[index][1] == tree[index][2] == -1 :
 		return True
-	if tree[index][0] < tree[ tree[index][1] ][0] or tree[index][0] > tree[ tree[index][2] ][0] :
+	if tree[index][1] != -1 and tree[index][0] < getMax( tree, tree[index][1] ) :
 		return False
+	if tree[index][2] != -1 and tree[index][0] > getMax( tree, tree[index][2] ) :
+		return False
+	return IsBinarySearchTree( tree, tree[index][1] ) and IsBinarySearchTree( tree, tree[index][2] )
+	
+def getMax( tree, index ) :
+	# list of list of ints, int --> int
+	# will just travel down the right children to report back the max value
+	if tree[index][2] == -1 :
+		return tree[index][0]	# da key
 	else :
-		return IsBinarySearchTree( tree, tree[index][1] ) and IsBinarySearchTree( tree, tree[index][2] )
+		return max( tree[index][0] , getMax( tree, tree[index][2] ) )
 
+def getMin( tree, index ) :
+	# list of list of ints, int --> int
+	# will just travel down the right children to report back the max value
+	if tree[index][1] == -1 :
+		return tree[index][0]	# da key
+	else :
+		return min( tree[index][0] , getMin( tree, tree[index][1] ) )
+		
 def main():
 	nodes = int(sys.stdin.readline().strip())	# reads the first line --> int - # of nodes
 	tree = []
 	for i in range(nodes):
 		tree.append(list(map(int, sys.stdin.readline().strip().split())))
-	pdb.set_trace()
+	# pdb.set_trace()
 	if IsBinarySearchTree(tree, 0):
 		print("CORRECT")
 	else:
