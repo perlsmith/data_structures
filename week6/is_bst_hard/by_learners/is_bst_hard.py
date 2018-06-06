@@ -15,6 +15,10 @@ def IsBinarySearchTree(tree, index):
 
 	
 def chkMinMax( tree, index, Min, Max ) : # min and max are builtins - maybe..
+	# list of lists of ints (key, l-child, r-child), int, int, int --> boolean
+	# how it works - you check that BST is valid for this parent and it's children (only)
+	# and then, your propagate the Min and Max the right way - so you do use recursion, but
+	# you solve a small problem each time..
 	if tree[index][0] < Min or tree[index][0] > Max :
 		return False
 	if tree[index][1] == tree[index][2] == -1 :
