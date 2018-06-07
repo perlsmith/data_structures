@@ -1,6 +1,7 @@
 # python3
 
 from sys import stdin
+import pdb
 
 # Splay tree implementation
 
@@ -140,6 +141,9 @@ def erase(x):
 	if not search( x ) :
 		return
 	else :	# now, we have x at the root position
+		if root.left == None and root.right == None :
+			root = None
+			return
 		L = root.left
 		R = root.right
 		R.left = L
@@ -172,7 +176,7 @@ def sum(fr, to):
 	ans = 0
   # Complete the implementation of sum
   # not clear if the sum operation should be self-adjusting like a search or insertion..
-	ans = middle.sum - right.sum
+	ans = middle.sum - ( right.sum if right != None else 0 )
 	merge(middle, right)
 
 	return ans
@@ -187,6 +191,7 @@ for i in range(n):
 		insert((x + last_sum_result) % MODULO)
 	elif '-' == line[0] :
 		x = int(line[1])
+		# pdb.set_trace()
 		erase((x + last_sum_result) % MODULO)
 	elif '?' == line[0] :
 		x = int(line[1])
