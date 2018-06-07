@@ -146,12 +146,18 @@ def erase(x):
 			return
 		L = root.left
 		R = root.right
-		R.left = L
-		L.parent = R
-		root = R
-		R.parent = None		# this is the new root
-		update(L)
-		update(R)
+		if R != None :
+			if L != None :
+				R.left = L
+				L.parent = R
+				update(L)
+			root = R
+			R.parent = None		# this is the new root
+			update(R)
+		else : # that is, only L exists
+			root = L
+			L.parent = None
+			update(L)
 # L <— N.Left
 # R <— N.Right
 # R.Left <— L
@@ -191,7 +197,7 @@ for i in range(n):
 		insert((x + last_sum_result) % MODULO)
 	elif '-' == line[0] :
 		x = int(line[1])
-		# pdb.set_trace()
+		pdb.set_trace()
 		erase((x + last_sum_result) % MODULO)
 	elif '?' == line[0] :
 		x = int(line[1])
