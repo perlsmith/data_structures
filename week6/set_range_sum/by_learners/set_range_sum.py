@@ -182,8 +182,9 @@ def sum(fr, to):
 	ans = 0
   # Complete the implementation of sum
   # not clear if the sum operation should be self-adjusting like a search or insertion..
-	ans = middle.sum - ( right.sum if right != None else 0 )
-	merge(middle, right)
+	if middle != None :
+		ans = middle.sum - ( right.sum if right != None else 0 )
+	root = merge(middle, right)
 
 	return ans
 
@@ -197,7 +198,7 @@ for i in range(n):
 		insert((x + last_sum_result) % MODULO)
 	elif '-' == line[0] :
 		x = int(line[1])
-		pdb.set_trace()
+		# pdb.set_trace()
 		erase((x + last_sum_result) % MODULO)
 	elif '?' == line[0] :
 		x = int(line[1])
@@ -205,6 +206,7 @@ for i in range(n):
 	elif 's' == line[0] :
 		l = int(line[1])
 		r = int(line[2])
+		pdb.set_trace()
 		res = sum((l + last_sum_result) % MODULO, (r + last_sum_result) % MODULO)
 		print(res)
 		last_sum_result = res % MODULO
