@@ -62,8 +62,8 @@ def bigRotation(v):
 def splay(v) :
 	if v == None :
 		return None
-	while v.parent != None:
-		if v.parent.parent == None:
+	while v.parent != None:	# i.e, v is not yet root!!
+		if v.parent.parent == None: # if v's parent IS root
 			smallRotation(v)
 			break
 		bigRotation(v)
@@ -127,7 +127,7 @@ root = None
 
 def insert(x):
 	global root
-	(left, right) = split(root, x)
+	(left, right) = split(root, x) # this is what lets you insert at the right place
 	new_vertex = None
 	if right == None or right.key != x:	# don't insert if the key already exists i the tree
 		new_vertex = Vertex(x, x, None, None, None)  
@@ -135,6 +135,10 @@ def insert(x):
   
 def erase(x): 
 	# int --> nothing; side effect - vertex with given key is removed
+	# may not have correctly implemented case of x being largest key..
+	# in which case there is no successor..
+	# might be a very leaky implementation since we don't have a destructor
+	# for class Vertex.. how to fix that?
 	global root
   # Implement erase yourself
 	search( x + 1 )	# get the successor to the root position (splaying)
@@ -175,7 +179,7 @@ def search(x):
 	else :
 		return True
   
-def sum(fr, to): 
+def Sum(fr, to): 
 	global root
 	(left, middle) = split(root, fr)
 	(middle, right) = split(middle, to + 1)
@@ -183,30 +187,72 @@ def sum(fr, to):
   # Complete the implementation of sum
   # not clear if the sum operation should be self-adjusting like a search or insertion..
 	if middle != None :
-		ans = middle.sum - ( right.sum if right != None else 0 )
-	root = merge(middle, right)
+		# ans = middle.sum - ( right.sum if right != None else 0 )
+		ans = middle.sum
+		root = merge( left , merge(middle, right) )
+	else :
+		root = merge( left, middle )
 
 	return ans
 
-MODULO = 1000000001
-n = int(stdin.readline())		# how many operations
-last_sum_result = 0
-for i in range(n):
-	line = stdin.readline().split()
-	if '+' == line[0] :
-		x = int(line[1])
-		insert((x + last_sum_result) % MODULO)
-	elif '-' == line[0] :
-		x = int(line[1])
+def nElems( vertex ) :
+	if vertex == None :
+		return 0
+	if vertex.left == vertex.right == None :
+		return 1
+	else :
+		if vertex.right == None :
+			return 1 + nElems( vertex.left )
+		else :
+			return 1 + nElems( vertex.right )
+	
+if __name__ == "__main__":
+	line = None
+	MODULO = 1000000001
+	n = int(stdin.readline())		# how many operations
+	line_cnt = 0	# debug aid
+	last_sum_result = 0
+	# cheating :
+	sum_count = 0
+	cheat_list = []
+	for i in range(n):
+		old_line = line
+		line = stdin.readline().split()
+		if len( line ) == 0 :
+			print( "entering debug 1")
+			print( "# lines ...... " , line_cnt )
+			pdb.set_trace()
+		line_cnt += 1	# debug aid
 		# pdb.set_trace()
-		erase((x + last_sum_result) % MODULO)
-	elif '?' == line[0] :
-		x = int(line[1])
-		print('Found' if search((x + last_sum_result) % MODULO) else 'Not found')
-	elif 's' == line[0] :
-		l = int(line[1])
-		r = int(line[2])
-		pdb.set_trace()
-		res = sum((l + last_sum_result) % MODULO, (r + last_sum_result) % MODULO)
-		print(res)
-		last_sum_result = res % MODULO
+		if '+' == line[0] :
+			x = int(line[1])
+			insert((x + last_sum_result) % MODULO)
+			cheat_list.append( (x + last_sum_result) % MODULO ) # dbg aid
+		elif '-' == line[0] :
+			x = int(line[1])
+			# pdb.set_trace()
+			erase((x + last_sum_result) % MODULO)
+			if (x + last_sum_result) % MODULO in cheat_list :
+				cheat_list.remove( (x + last_sum_result) % MODULO )
+			if len( cheat_list ) != nElems( root ) :
+				print( "bad delete op!")
+				print( "# lines :::::::::: " , line_cnt )
+				pdb.set_trace()
+			
+		elif '?' == line[0] :
+			x = int(line[1])
+			print('Found' if search((x + last_sum_result) % MODULO) else 'Not found')
+		elif 's' == line[0] :
+			l = int(line[1])
+			r = int(line[2])
+			sum_count += 1
+			# if 11 == sum_count :
+				# pdb.set_trace()
+			res = Sum((l + last_sum_result) % MODULO, (r + last_sum_result) % MODULO)
+			print(res)
+			# if sum_count > 8 and None == root :
+				# pdb.set_trace()
+			last_sum_result = res % MODULO
+		elif 'd' == line[0] or line_cnt == 63 :
+			print( "entering debug 2")
+			pdb.set_trace()	# debug aid
