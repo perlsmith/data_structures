@@ -200,7 +200,7 @@ def Sum(fr, to):
 		ans = middle.sum
 		root = merge( left , merge(middle, right) )
 	else :
-		root = merge( left, middle )
+		root = merge( left, right )
 
 	return ans
 
