@@ -3,6 +3,14 @@
 from sys import stdin
 import pdb
 
+import inspect
+
+def isDBG():
+	for frame in inspect.stack():
+		if frame[1].endswith("pdb.py"):
+			return True
+	return False
+
 # Splay tree implementation
 
 # Vertex of a splay tree
@@ -174,6 +182,7 @@ def search(x):
 	global root
   # Implement find yourself
 	find_node, find_root = find( root, x )
+	root = find_root
 	if None == find_node or x != find_node.key :
 		return False
 	else :
@@ -197,14 +206,11 @@ def Sum(fr, to):
 
 def nElems( vertex ) :
 	if vertex == None :
-		return 0
-	if vertex.left == vertex.right == None :
-		return 1
-	else :
-		if vertex.right == None :
-			return 1 + nElems( vertex.left )
-		else :
-			return 1 + nElems( vertex.right )
+		return 0 
+	if isDBG() :
+		print( vertex.key )
+	return 1 + nElems( vertex.left ) + nElems( vertex.right )
+
 	
 if __name__ == "__main__":
 	line = None
@@ -218,7 +224,7 @@ if __name__ == "__main__":
 	for i in range(n):
 		old_line = line
 		line = stdin.readline().split()
-		if len( line ) == 0 :
+		if len( line ) == 1 :
 			print( "entering debug 1")
 			print( "# lines ...... " , line_cnt )
 			pdb.set_trace()
@@ -253,6 +259,10 @@ if __name__ == "__main__":
 			# if sum_count > 8 and None == root :
 				# pdb.set_trace()
 			last_sum_result = res % MODULO
-		elif 'd' == line[0] or line_cnt == 63 :
+		elif 'd' == line[0] : # or line_cnt == 63 :
 			print( "entering debug 2")
 			pdb.set_trace()	# debug aid
+
+		if len( cheat_list ) != nElems( root ) :
+			print( "# lines ---------  " , line_cnt )
+			pdb.set_trace()
