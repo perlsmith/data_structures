@@ -224,27 +224,27 @@ if __name__ == "__main__":
 	for i in range(n):
 		old_line = line
 		line = stdin.readline().split()
-		if len( line ) == 1 :
-			stderr.write( "entering debug 1")
-			stderr.write( "# lines ...... " + str(line_cnt) )
-			pdb.set_trace()
+		# if len( line ) == 1 :
+			# stderr.write( "entering debug 1")
+			# stderr.write( "# lines ...... " + str(line_cnt) )
+			# pdb.set_trace()
 		line_cnt += 1	# debug aid
 		# pdb.set_trace()
 		if '+' == line[0] :
 			x = int(line[1])
 			insert((x + last_sum_result) % MODULO)
-			if not (x + last_sum_result ) % MODULO in cheat_list :
-				cheat_list.append( (x + last_sum_result) % MODULO ) # dbg aid
+			# if not (x + last_sum_result ) % MODULO in cheat_list :
+				# cheat_list.append( (x + last_sum_result) % MODULO ) # dbg aid
 		elif '-' == line[0] :
 			x = int(line[1])
 			# pdb.set_trace()
 			erase((x + last_sum_result) % MODULO)
 			if (x + last_sum_result) % MODULO in cheat_list :
 				cheat_list.remove( (x + last_sum_result) % MODULO )
-			if len( cheat_list ) != nElems( root ) :
-				stderr.write( "bad delete op!")
-				stderr.write( "# lines :::::::::: " + str(line_cnt) ) 
-				pdb.set_trace()
+			# if len( cheat_list ) != nElems( root ) :
+				# stderr.write( "bad delete op!")
+				# stderr.write( "# lines :::::::::: " + str(line_cnt) ) 
+				# pdb.set_trace()
 			
 		elif '?' == line[0] :
 			x = int(line[1])
@@ -264,6 +264,6 @@ if __name__ == "__main__":
 			stderr.write( "entering debug 2")
 			pdb.set_trace()	# debug aid
 
-		if len( cheat_list ) != nElems( root ) :
-			stderr.write( "# lines ---------  " +str( line_cnt ) + "\n" )
-			pdb.set_trace()
+		# if len( cheat_list ) != nElems( root ) :
+			# stderr.write( "# lines ---------  " +str( line_cnt ) + "\n" )
+			# pdb.set_trace()
