@@ -1,6 +1,6 @@
 # python3
 
-from sys import stdin
+from sys import stdin, stderr
 import pdb
 
 import inspect
@@ -225,15 +225,16 @@ if __name__ == "__main__":
 		old_line = line
 		line = stdin.readline().split()
 		if len( line ) == 1 :
-			print( "entering debug 1")
-			print( "# lines ...... " , line_cnt )
+			stderr.write( "entering debug 1")
+			stderr.write( "# lines ...... " + str(line_cnt) )
 			pdb.set_trace()
 		line_cnt += 1	# debug aid
 		# pdb.set_trace()
 		if '+' == line[0] :
 			x = int(line[1])
 			insert((x + last_sum_result) % MODULO)
-			cheat_list.append( (x + last_sum_result) % MODULO ) # dbg aid
+			if not (x + last_sum_result ) % MODULO in cheat_list :
+				cheat_list.append( (x + last_sum_result) % MODULO ) # dbg aid
 		elif '-' == line[0] :
 			x = int(line[1])
 			# pdb.set_trace()
@@ -241,8 +242,8 @@ if __name__ == "__main__":
 			if (x + last_sum_result) % MODULO in cheat_list :
 				cheat_list.remove( (x + last_sum_result) % MODULO )
 			if len( cheat_list ) != nElems( root ) :
-				print( "bad delete op!")
-				print( "# lines :::::::::: " , line_cnt )
+				stderr.write( "bad delete op!")
+				stderr.write( "# lines :::::::::: " + str(line_cnt) ) 
 				pdb.set_trace()
 			
 		elif '?' == line[0] :
@@ -260,9 +261,9 @@ if __name__ == "__main__":
 				# pdb.set_trace()
 			last_sum_result = res % MODULO
 		elif 'd' == line[0] : # or line_cnt == 63 :
-			print( "entering debug 2")
+			stderr.write( "entering debug 2")
 			pdb.set_trace()	# debug aid
 
 		if len( cheat_list ) != nElems( root ) :
-			print( "# lines ---------  " , line_cnt )
+			stderr.write( "# lines ---------  " +str( line_cnt ) + "\n" )
 			pdb.set_trace()
