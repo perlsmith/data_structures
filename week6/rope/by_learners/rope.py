@@ -9,7 +9,48 @@ class Vertex:
 		(self.char, self.size, self.left, self.right, self.parent) = (char, size, left, right, parent)
 	# the key is the character value - single string char like 'b'
 
-def update(v):
+def insert( root, new ) :
+	pass
+	# root of a splay tree, which is a Vertex object and a new Vertex object
+	# the new object becomes the new root and the erstwhile root becomes the
+	# root of the right sub-tree
+	# actually, this cannot be used because it's naive O(n) and this problem doesn't
+	# call for it.. We really need to do cut-paste using split/merge
+	
+def split(root, position):
+	# (Vertex object, int ) --> vertex object, vertex object
+	# the returned objects are the roots of new trees now..
+	# copy from set_range_sum and then the update changed to be local (not func calls)
+	(result, root) = find(root, position)  
+	if result == None:    
+		return (root, None)  
+	right = splay(result)	# may be redundant..
+	left = right.left
+	if left != None:
+		right.size -= left.size
+	right.left = None
+	if left != None:
+		left.parent = None
+	# beauty of the string splay tree is that the left child needs no size update :)
+	return (left, right)
+	
+def merge(left, right):
+	# ( vertex object , Vertex object ) --> Vertex object
+	if left == None:
+		return right
+	if right == None:
+		return left
+	while right.left != None:
+		right = right.left	# descend down to the right's left descendant - since
+							# that's the first char of that string..
+	right = splay(right)	# make it the root of the right tree..
+	right.left = left
+	left.parent = right
+	if left != None :
+		right.size += left.size
+	return right
+	
+def update(v):	# currently UNUSED!!!
 # called by the rotation functions to update the sum and the childrens' parent pointers
 	if v == None:
 		return
@@ -135,20 +176,44 @@ class Rope:
 		latest.parent = self.root
 			
 	def result(self):
+		self.s = self.io_traverse( self.root )
 		return self.s
-	def process(self, i, j, k):
+		
+	def process_naive(self, i, j, k):
                 # Write your code here
 		extract = self.s[i:j+1]
 		self.s = self.s[0:i] + self.s[j+1:]
 		self.s = self.s[0:k] + extract + self.s[k:]
-                
+
+	def process( self, i, j, k ) :
+		top, bot = split( self.root, j )
+		top, selection = split( top, i )
+		new = merge( top, bot )
+		top, bot = split( new, k )
+		top = merge( top, selection )
+		self.root = merge( top, bot )
+
+	def io_traverse(self, root ) :
+		if root.left != None :
+			self.io_traverse( root.left )
+		self.s += root.char
+		if self.right != None :
+			self.io_traverse( root.right )
+
+		
 if __name__ == "__main__":
 	pdb.set_trace()
 	rope = Rope(sys.stdin.readline().strip())
 	# debug WIP
-	mid,root = find( rope.root, 3 )
+	# mid,root = find( rope.root, 3 )
 	q = int(sys.stdin.readline())
 	for _ in range(q):
 		i, j, k = map(int, sys.stdin.readline().strip().split())
 		rope.process(i, j, k)
 	print(rope.result())
+
+# what a beautiful assignment - builds on everything - you have to use the
+# tree traversal stuff as well 
+
+# why do you splay the descendant? So that your merge code becomes simple..
+# you have to worry about size only once.. (update)
