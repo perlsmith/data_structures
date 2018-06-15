@@ -28,6 +28,8 @@ def split(root, position):
 	# (Vertex object, int ) --> vertex object, vertex object
 	# the returned objects are the roots of new trees now..
 	# copy from set_range_sum and then the update changed to be local (not func calls)
+	if position < 0 :
+		return (None, root )	# after trying this trick in find didn't do much :)
 	(result, root) = find(root, position)  
 	if result == None:    
 		return (root, None)  
@@ -145,7 +147,7 @@ def splay(v) :
 # then result is None.
 def find(root, position): 
 	if position < 0 :
-		return (None, root )
+		return (root, root )
 	else :
 		target = find_position( root, position )
 		if target != None :
@@ -236,7 +238,7 @@ class Rope:
 
 		
 if __name__ == "__main__":
-	# pdb.set_trace()
+	pdb.set_trace()
 	rope = Rope(sys.stdin.readline().strip())
 	# debug WIP
 	# mid,root = find( rope.root, 3 )
