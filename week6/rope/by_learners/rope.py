@@ -38,6 +38,8 @@ def split(root, position):
 	right.left = None
 	if left != None:
 		left.parent = None
+	if right != None :
+		right.parent = None
 	# beauty of the string splay tree is that the left child needs no size update :)
 	# the problem, up to here is that left is none when position is 1 (input)
 	# and this doesn't help the problem we're trying to solve.. even though this
@@ -46,6 +48,7 @@ def split(root, position):
 		left = right
 		left.size = 1
 		right = right.right
+		right.parent = None
 		left.right = None # chop off..
 	return (left, right)
 	
