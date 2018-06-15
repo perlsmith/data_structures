@@ -144,6 +144,7 @@ def splay(v) :
 # If the position is bigger than all positions in the tree,
 # then result is None.
 def find(root, position): 
+	
 	target = find_position( root, position )
 	if target != None :
 		root = splay(target)
@@ -158,26 +159,27 @@ def find_position( root, position ) :
 	else :
 		if root.left == None :	# if root has no left child, then
 								# string starts here :)
-			if position == 1 :
-				return root		# this is bogus -- crap.. -it's a splay tree man!!
+			if position == 0 :
+				return root		
 			else :
 				if root.right == None :
 					return None
 				else :
-					if position < root.size + 1 :
+					if position + 1 < root.size  :
 					# only then can the target exist here
 						return find_position( root.right, position - 1 )
 					else :
 						return None
 		else :
-			s = root.left.size
-			if position == s + 1 :
+			sL = root.left.size
+			if position + 1 == sL :	# say it's L.size = 1, and you have root, 
+									# so here, position needs to be 1 to return root
 				return root
 			else :
-				if position < s + 1 : # char exists in this subtree
+				if position < sL  : # char exists in this subtree
 					return find_position( root.left, position )
 				elif root.right != None :
-					return find_position( root.right, position -s -1)
+					return find_position( root.right, position -sL -1)
 				else :
 					return None
 
@@ -207,7 +209,7 @@ class Rope:
 		self.s = self.s[0:k] + extract + self.s[k:]
 
 	def process( self, i, j, k ) :
-		top, bot = split( self.root, j+2 )
+		top, bot = split( self.root, j+1 )
 		top, selection = split( top, i )
 		new = merge( top, bot )
 		if k > 0 :
