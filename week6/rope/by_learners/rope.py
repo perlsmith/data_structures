@@ -82,13 +82,15 @@ def smallRotation(v):
 		parent.left = m
 	else:	# we are the right child
 		v.size = v.size + 1 + (parent.left.size if parent.left != None else 0 ) - (v.left.size if v.left != None else 0 )
+		# the last term is an error - it should not be subtracted because it will still
+		# be within v's subtree... duh :)
 		parent.size = parent.size -size + (v.left.size if v.left != None else 0 )
 		m = v.left
 		# sizes updated prior to rotation..
 		v.left = parent
 		parent.right = m
 		
-	v.parent = grandparent
+	v.parent = grandparent	# promotion
 	if grandparent != None:
 		if grandparent.left == parent:
 			grandparent.left = v
@@ -202,11 +204,13 @@ class Rope:
 		self.root = merge( top, bot )
 
 	def io_traverse(self, root ) :
+		result = ''
 		if root.left != None :
-			self.io_traverse( root.left )
-		self.s += root.char
+			result = self.io_traverse( root.left )
+		result += root.char
 		if root.right != None :
-			self.io_traverse( root.right )
+			result += self.io_traverse( root.right )
+		return result
 
 		
 if __name__ == "__main__":
