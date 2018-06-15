@@ -28,7 +28,7 @@ def split(root, position):
 	# (Vertex object, int ) --> vertex object, vertex object
 	# the returned objects are the roots of new trees now..
 	# copy from set_range_sum and then the update changed to be local (not func calls)
-	if position < 0 :
+	if position <= 0 :
 		return (None, root )	# after trying this trick in find didn't do much :)
 	(result, root) = find(root, position)  
 	if result == None:    
@@ -169,14 +169,14 @@ def find_position( root, position ) :
 				if root.right == None :
 					return None
 				else :
-					if position + 1 < root.size  :
+					if position  < root.size  :
 					# only then can the target exist here
 						return find_position( root.right, position - 1 )
 					else :
 						return None
 		else :
 			sL = root.left.size
-			if position + 1 == sL :	# say it's L.size = 1, and you have root, 
+			if position  == sL :	# say it's L.size = 1, and you have root, 
 									# so here, position needs to be 1 to return root
 				return root
 			else :
@@ -214,7 +214,7 @@ class Rope:
 
 	def process( self, i, j, k ) :
 		top, bot = split( self.root, j+1 )
-		top, selection = split( top, i-1 )
+		top, selection = split( top, i )
 		new = merge( top, bot )
 		if k > 0 :
 			top, bot = split( new, k )
