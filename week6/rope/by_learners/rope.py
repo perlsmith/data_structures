@@ -159,7 +159,7 @@ def find_position( root, position ) :
 		if root.left == None :	# if root has no left child, then
 								# string starts here :)
 			if position == 1 :
-				return root
+				return root		# this is bogus -- crap.. -it's a splay tree man!!
 			else :
 				if root.right == None :
 					return None
