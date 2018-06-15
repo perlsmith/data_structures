@@ -95,7 +95,8 @@ def smallRotation(v):
 		v.left = parent
 		parent.right = m
 	parent.parent = v
-	# m.parent = parent	# the one that caused some grief :)
+	if m != None :
+		m.parent = parent	# the one that caused some grief :)
 		
 	v.parent = grandparent	# promotion
 	if grandparent != None:
