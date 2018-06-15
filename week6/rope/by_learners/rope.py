@@ -144,11 +144,13 @@ def splay(v) :
 # If the position is bigger than all positions in the tree,
 # then result is None.
 def find(root, position): 
-	
-	target = find_position( root, position )
-	if target != None :
-		root = splay(target)
-	return (target, root)
+	if position < 0 :
+		return (None, root )
+	else :
+		target = find_position( root, position )
+		if target != None :
+			root = splay(target)
+		return (target, root)
 	
 def find_position( root, position ) :
 	# ( vertex object , int ) --> vertex object
@@ -210,10 +212,10 @@ class Rope:
 
 	def process( self, i, j, k ) :
 		top, bot = split( self.root, j+1 )
-		top, selection = split( top, i )
+		top, selection = split( top, i-1 )
 		new = merge( top, bot )
 		if k > 0 :
-			top, bot = split( new, k+1 )
+			top, bot = split( new, k )
 			top = merge( top, selection )
 			self.root = merge( top, bot )
 		else :
@@ -234,7 +236,7 @@ class Rope:
 
 		
 if __name__ == "__main__":
-	pdb.set_trace()
+	# pdb.set_trace()
 	rope = Rope(sys.stdin.readline().strip())
 	# debug WIP
 	# mid,root = find( rope.root, 3 )
