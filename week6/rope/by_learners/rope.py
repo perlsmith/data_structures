@@ -204,12 +204,15 @@ class Rope:
 		self.s = self.s[0:k] + extract + self.s[k:]
 
 	def process( self, i, j, k ) :
-		top, bot = split( self.root, j )
+		top, bot = split( self.root, j+2 )
 		top, selection = split( top, i )
 		new = merge( top, bot )
-		top, bot = split( new, k )
-		top = merge( top, selection )
-		self.root = merge( top, bot )
+		if k > 0 :
+			top, bot = split( new, k+1 )
+			top = merge( top, selection )
+			self.root = merge( top, bot )
+		else :
+			self.root = merge( selection, top )
 
 	def io_traverse(self, root ) :
 		result = ''
