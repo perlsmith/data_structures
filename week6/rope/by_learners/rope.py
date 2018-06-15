@@ -1,7 +1,14 @@
 # python3
 
 import sys, pdb
+import inspect
 
+def isDBG():
+	for frame in inspect.stack():
+		if frame[1].endswith("pdb.py"):
+			return True
+	return False
+	
 # Vertex of a splay tree
 class Vertex:
 	def __init__(self, char, size, left, right, parent):
@@ -75,20 +82,20 @@ def smallRotation(v):
 		return
 	grandparent = v.parent.parent
 	if parent.left == v:		# i.e., we are left child, parent's key is > than us.. so it gets our right child..
-		v.size = v.size + (parent.right.size if parent.right != None else 0) -(v.right.size if v.right != None else 0 )
+		v.size = v.size + (parent.right.size if parent.right != None else 0) 
 		parent.size = parent.size - size + (v.right.size if v.right != None else 0 )
 		m = v.right
 		v.right = parent
 		parent.left = m
 	else:	# we are the right child
-		v.size = v.size + 1 + (parent.left.size if parent.left != None else 0 ) - (v.left.size if v.left != None else 0 )
-		# the last term is an error - it should not be subtracted because it will still
-		# be within v's subtree... duh :)
+		v.size = v.size + 1 + (parent.left.size if parent.left != None else 0 )
 		parent.size = parent.size -size + (v.left.size if v.left != None else 0 )
 		m = v.left
 		# sizes updated prior to rotation..
 		v.left = parent
 		parent.right = m
+	parent.parent = v
+	# m.parent = parent	# the one that caused some grief :)
 		
 	v.parent = grandparent	# promotion
 	if grandparent != None:
@@ -206,9 +213,13 @@ class Rope:
 	def io_traverse(self, root ) :
 		result = ''
 		if root.left != None :
+			if root.left.parent != root :
+				print( root.left.char)
 			result = self.io_traverse( root.left )
 		result += root.char
 		if root.right != None :
+			if root.right.parent != root :
+				print( root.right.char )
 			result += self.io_traverse( root.right )
 		return result
 
