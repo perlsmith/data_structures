@@ -87,14 +87,14 @@ def smallRotation(v):
 		return
 	grandparent = v.parent.parent
 	if parent.left == v:		# i.e., we are left child, parent's key is > than us.. so it gets our right child..
-		v.size = v.size + (parent.right.size if parent.right != None else 0) 
+		v.size += 1 + (parent.right.size if parent.right != None else 0) 
 		parent.size = parent.size - size + (v.right.size if v.right != None else 0 )
 		m = v.right
 		v.right = parent
 		parent.left = m
 	else:	# we are the right child
-		v.size = v.size + 1 + (parent.left.size if parent.left != None else 0 )
-		parent.size = parent.size -size + (v.left.size if v.left != None else 0 )
+		v.size += 1 + (parent.left.size if parent.left != None else 0 )
+		parent.size = parent.size - size + (v.left.size if v.left != None else 0 )
 		m = v.left
 		# sizes updated prior to rotation..
 		v.left = parent
@@ -238,7 +238,7 @@ class Rope:
 
 		
 if __name__ == "__main__":
-	pdb.set_trace()
+	# pdb.set_trace()
 	rope = Rope(sys.stdin.readline().strip())
 	# debug WIP
 	# mid,root = find( rope.root, 3 )
